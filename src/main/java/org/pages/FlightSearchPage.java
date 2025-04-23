@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 public class FlightSearchPage {
     WebDriver driver;
@@ -68,6 +71,10 @@ public class FlightSearchPage {
 
     @FindBy(xpath = "//button[@placeholder='Depart - Return']")
     private WebElement dateBtn;
+
+    @FindBy(xpath = "//h2[text()='Filters']")
+    private WebElement filterBtn;
+
     public void selectTripType(String type) {
         switch (type.toLowerCase()) {
             case "roundtrip":
@@ -120,16 +127,10 @@ public class FlightSearchPage {
         return driver.findElement(By.xpath("//button[@data-ui-name='input_location_to_segment_0']//span/b[contains(text(),'" + to + "')]")).isDisplayed();
     }
 
-    public boolean isFromAirportCorrect(String code) {
-        return fromText.getText().contains(code);
-    }
-
-    public boolean isToAirportCorrect(String code) {
-        return toText.getText().contains(code);
-    }
 
     public void selectDepartureDate(LocalDate date) {
         navigateToMonth(date);
+        selectDate(LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
         selectDate(date);
     }
 
@@ -167,6 +168,16 @@ public class FlightSearchPage {
     public void clickOnCalender()
     {
         dateBtn.click();
+    }
+
+    public boolean isFilterListOfFlight(){
+        boolean status=false;
+          if(filterBtn.isDisplayed()){
+              status= filterBtn.isDisplayed();
+          }
+
+        return status;
+
     }
 }
 

@@ -69,5 +69,6 @@ public class FlightSearchSteps {
         softAssert.assertEquals(fromStatus, true);
         softAssert.assertEquals(toStatus, true);
         softAssert.assertAll();
+
     }
 }
