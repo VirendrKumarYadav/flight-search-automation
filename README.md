@@ -4,7 +4,7 @@ An automated UI testing framework built for a flight search and booking platform
 
 ## 🌍 Tech Stack
 
-- Java 17+
+- Java 1.8
 - Selenium WebDriver
 - TestNG
 - Cucumber (BDD)
@@ -59,63 +59,18 @@ mvn test -DsuiteXmlFile=testng.xml
     ┣ 📂 java
     ┃ ┣ 📂 stepdefinitions  # Cucumber Step Definitions
     ┃ ┣ 📂 runners          # TestNG Runner
-    ┃ ┗ 📂 hooks            # Setup/Teardown Hooks
+    ┃        
     ┗ 📂 resources
       ┗ 📂 features         # .feature files for test scenarios
+ ┣ 📂 target
+      ┗ 📂 cucumber-reports.html  
 
 📄 pom.xml
 📄 testng.xml
-🛠️ Customize Locators
+
 ```
 Edit locators in the pages/FlightSearchPage.java file to match your application’s DOM structure.
 
-
-##🔁 CI/CD Integration (Optional)
-You can integrate this with GitHub Actions or Jenkins for continuous testing on every push. Here is an example GitHub Actions setup:
-```
-yaml
-Copy
-Edit
-name: Flight Booking Automation Tests
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [11, 17]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: ${{ matrix.java }}
-      - name: Build with Maven
-        run: mvn clean install
-      - name: Run Tests
-        run: mvn test
-```      
-##🤝 Contributing
-Contributions are welcome! Please follow these steps:
-
-Fork the repo
-
-Create a new branch (feature/your-feature)
-
-Commit your changes
-
-Push to your branch
-
-Create a pull request
 
 📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
