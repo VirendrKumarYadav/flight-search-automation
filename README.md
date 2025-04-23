@@ -1,4 +1,4 @@
-# ✈️ Flight Booking Automation Framework
+# ✈️ Flight Booking Automation Framework(AKQA)
 
 An automated UI testing framework built for a flight search and booking platform (similar to Booking.com or Agoda). This project uses **Selenium WebDriver**, **Cucumber BDD**, and **TestNG** for behavior-driven test automation with the **Page Factory** pattern for clean and maintainable code.
 
