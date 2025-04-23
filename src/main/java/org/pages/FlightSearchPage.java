@@ -1,9 +1,17 @@
 package org.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class FlightSearchPage {
     WebDriver driver;
@@ -34,6 +42,32 @@ public class FlightSearchPage {
     @FindBy(xpath = "//button[@data-ui-name='input_location_to_segment_0']//span/b[contains(text(),'DEL')]")
     private WebElement toText;
 
+    @FindBy(xpath = "//ul[@id='flights-searchbox_suggestions']//li[position()=1]//input")
+    private WebElement selectFirstCity;
+
+    @FindBy(xpath = "//div[contains(@class,'LocationsDropDown-module__container')]//button")
+    private WebElement clearSelectedCity;
+
+    @FindBy(xpath = "//input[@placeholder='Airport or city']")
+    private WebElement searchBox;
+
+    @FindBy(css = "[data-ui-name='button_search_submit']")
+    private WebElement searchButton;
+
+    @FindBy(xpath = "//ul[@id='flights-searchbox_suggestions']")
+    private WebElement ddOptions;
+
+    @FindBy(xpath = "(//div[contains(@class,'Calendar-module__monthWrapper')]/h3)[1]")
+    private WebElement displayedMonth;
+
+    @FindBy(xpath = "//button[contains(@class,'Calendar-module__control--next')]")
+    private WebElement nextMonthBtn;
+
+    @FindBy(xpath = "//button[contains(@class,'Calendar-module__control--prev')]")
+    private WebElement prevMonthBtn;
+
+    @FindBy(xpath = "//button[@placeholder='Depart - Return']")
+    private WebElement dateBtn;
     public void selectTripType(String type) {
         switch (type.toLowerCase()) {
             case "roundtrip":
@@ -52,18 +86,40 @@ public class FlightSearchPage {
 
     public void clickFromButton() {
         fromButton.click();
+        if (new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> clearSelectedCity.isDisplayed())) {
+            clearSelectedCity.click();
+        }
     }
 
     public void clickToButton() {
         toButton.click();
     }
 
-    public void putInFromInput(String from){
-
+    public void enterFromCity(String from) {
+        searchBox.sendKeys(from);
     }
-    public void putInToInput(String to){
 
+    public void enterToCity(String to) {
+        searchBox.sendKeys(to);
     }
+
+    public void selectCity() {
+        if (new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> ddOptions.isDisplayed()))
+            selectFirstCity.click();
+    }
+
+    public void clickSearchButton() {
+        searchButton.click();
+    }
+
+    public boolean isFromSelected(String from) {
+        return driver.findElement(By.xpath("//button[@data-ui-name='input_location_from_segment_0']//span/b[contains(text(),'" + from + "')]")).isDisplayed();
+    }
+
+    public boolean isToSelected(String to) {
+        return driver.findElement(By.xpath("//button[@data-ui-name='input_location_to_segment_0']//span/b[contains(text(),'" + to + "')]")).isDisplayed();
+    }
+
     public boolean isFromAirportCorrect(String code) {
         return fromText.getText().contains(code);
     }
@@ -71,4 +127,46 @@ public class FlightSearchPage {
     public boolean isToAirportCorrect(String code) {
         return toText.getText().contains(code);
     }
+
+    public void selectDepartureDate(LocalDate date) {
+        navigateToMonth(date);
+        selectDate(date);
+    }
+
+    private void navigateToMonth(LocalDate targetDate) {
+        DateTimeFormatter monthYearFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH);
+
+        while (true) {
+
+            YearMonth displayed = YearMonth.parse(displayedMonth.getText(), monthYearFormatter);
+            YearMonth target = YearMonth.from(targetDate);
+
+            if (displayed.equals(target)) {
+                break;
+            } else if (displayed.isBefore(target)) {
+                nextMonthBtn.click();
+            } else {
+                prevMonthBtn.click();
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        }
+    }
+
+    private void selectDate(LocalDate date) {
+        String dateStr = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String xpath = String.format(
+                "//span[@data-date='%s' and contains(@class,'Calendar-module__date--hoverable')]", dateStr
+        );
+        WebElement dateCell = driver.findElement(By.xpath(xpath));
+        dateCell.click();
+    }
+
+    public void clickOnCalender()
+    {
+        dateBtn.click();
+    }
 }
+
