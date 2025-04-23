@@ -53,15 +53,15 @@ mvn test -DsuiteXmlFile=testng.xml
 📁 src
   ┣ 📂 main
   ┃ ┗ 📂 java
-  ┃   ┗ 📂 pages            # Page Factory elements
+  ┃   ┗ 📂 pages           
   ┃
   ┣ 📂 test
     ┣ 📂 java
-    ┃ ┣ 📂 stepdefinitions  # Cucumber Step Definitions
-    ┃ ┣ 📂 runners          # TestNG Runner
+    ┃ ┣ 📂 stepdefinitions  
+    ┃ ┣ 📂 runners         
     ┃        
     ┗ 📂 resources
-      ┗ 📂 features         # .feature files for test scenarios
+      ┗ 📂 features       
  ┣ 📂 target
       ┗ 📂 cucumber-reports.html  
 
