@@ -103,11 +103,13 @@ public class FlightSearchPage {
     }
 
     public void enterFromCity(String from) {
-        searchBox.sendKeys(from);
+        if (new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> searchBox.isDisplayed()))
+            searchBox.sendKeys(from);
     }
 
     public void enterToCity(String to) {
-        searchBox.sendKeys(to);
+            if (new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> searchBox.isDisplayed()))
+              searchBox.sendKeys(to);
     }
 
     public void selectCity() {
